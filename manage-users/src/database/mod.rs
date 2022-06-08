@@ -4,7 +4,7 @@ use dotenv::dotenv;
 
 use mongodb::{
     bson::{extjson::de::Error, oid::ObjectId, doc},
-    results::{ InsertOneResult , UpdateResult},
+    results::{ InsertOneResult , UpdateResult },
     sync::{Client, Collection},
 };
 use crate::model::User;
@@ -53,6 +53,19 @@ impl MongoRepo {
 
     }
 
+    pub fn get_user_email(&self,email:&String) -> Result<Option<User>, Error> {
+        
+        let filter = doc!{"email":email};
+        let user_detail = self
+            .col
+            .find_one(filter, None)
+            .ok()
+            .expect("Error getting user's detail");
+        Ok(user_detail)
+        
+    }
+
+
     pub fn update_user(&self , id : &String , new_user : User) -> Result<UpdateResult , Error>{
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc!{"id":obj_id};
@@ -71,5 +84,5 @@ impl MongoRepo {
             .expect("Error updating user");
         Ok(updated_doc)
     }
-  
+   
 }

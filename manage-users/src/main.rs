@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate rocket;
 
- 
+mod crypto_auth;
 mod model;
 mod routes;
 mod database;
@@ -14,9 +14,8 @@ fn rocket() -> _ {
    let db = MongoRepo::init();
    rocket::build()
       .manage(db)
-      .mount("/", routes![register])
-      .mount("/", routes![get_user])
-      .mount("/",routes![update_user])
+      .mount("/auth", routes![register, login])
+      .mount("/user", routes![get_user, update_user])
    
          
 }

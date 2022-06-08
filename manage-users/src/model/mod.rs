@@ -13,3 +13,7 @@ pub struct User {
     pub password : String , 
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct LoginStatus{
+    pub is_login : bool,
+}
